@@ -64,4 +64,8 @@ public class Category extends BaseTimeEntity {
 	public void delete() {
 		this.status = CategoryStatus.DELETE;
 	}
+
+	public boolean isNotCreatedByUser(Long userId) {
+		return this.user.getId() == userId;
+	}
 }

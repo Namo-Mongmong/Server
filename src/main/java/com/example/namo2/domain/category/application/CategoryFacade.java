@@ -44,15 +44,16 @@ public class CategoryFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public CategoryResponse.CategoryIdDto modifyCategory(Long categoryId, CategoryRequest.PostCategoryDto dto) {
+	public CategoryResponse.CategoryIdDto modifyCategory(Long categoryId, CategoryRequest.PostCategoryDto dto,
+		Long userId) {
 		Palette palette = paletteService.getPalette(dto.getPaletteId());
-		Category modifiedCategory = categoryService.modifyCategory(categoryId, dto, palette);
+		Category modifiedCategory = categoryService.modifyCategory(categoryId, dto, palette, userId);
 
 		return CategoryResponseConverter.toCategoryIdDto(modifiedCategory);
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteCategory(Long categoryId) {
-		categoryService.delete(categoryId);
+	public void deleteCategory(Long categoryId, Long userId) {
+		categoryService.delete(categoryId, userId);
 	}
 }

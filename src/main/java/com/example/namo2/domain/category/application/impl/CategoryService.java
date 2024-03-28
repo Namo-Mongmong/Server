@@ -15,6 +15,7 @@ import com.example.namo2.domain.category.ui.dto.CategoryRequest;
 import com.example.namo2.domain.user.domain.User;
 
 import com.example.namo2.global.common.exception.BaseException;
+import com.example.namo2.global.common.response.BaseResponseStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,9 +32,10 @@ public class CategoryService {
 		return categoryRepository.findCategoriesByUserIdAndStatusEquals(userId, CategoryStatus.ACTIVE);
 	}
 
-	public void delete(Long categoryId) {
+	public void delete(Long categoryId, Long userId) {
 		Category category = getCategory(categoryId);
 		validateBaseCategory(category);
+		validateUsersCategory(userId, category);
 		category.delete();
 	}
 
@@ -46,14 +48,21 @@ public class CategoryService {
 			.orElseThrow(() -> new BaseException(NOT_FOUND_CATEGORY_FAILURE));
 	}
 
-	public Category modifyCategory(Long categoryId, CategoryRequest.PostCategoryDto dto, Palette palette) {
+	public Category modifyCategory(Long categoryId, CategoryRequest.PostCategoryDto dto, Palette palette, Long userId) {
 		Category category = getCategory(categoryId);
 		validateBaseCategory(category);
+		validateUsersCategory(userId, category);
 		category.update(dto.getName(), dto.isShare(), palette);
 		return category;
 	}
 
-	private static void validateBaseCategory(Category category) {
+	private void validateUsersCategory(Long userId, Category category) {
+		if (category.isNotCreatedByUser(userId)) {
+			throw new BaseException(BaseResponseStatus.NOT_USERS_CATEGORY);
+		}
+	}
+
+	private void validateBaseCategory(Category category) {
 		if (category.getName().equals("일정") || category.getName().equals("모임")) {
 			throw new BaseException(NOT_DELETE_BASE_CATEGORY_FAILURE);
 		}

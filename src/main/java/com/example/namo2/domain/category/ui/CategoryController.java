@@ -53,15 +53,20 @@ public class CategoryController {
 	@Operation(summary = "카테고리 수정", description = "카테고리 수정 API")
 	@PatchMapping("/{categoryId}")
 	public BaseResponse<CategoryResponse.CategoryIdDto> updateCategory(@PathVariable("categoryId") Long categoryId,
-		@Valid @RequestBody CategoryRequest.PostCategoryDto postcategoryDto) {
-		CategoryResponse.CategoryIdDto categoryIdDto = categoryFacade.modifyCategory(categoryId, postcategoryDto);
+		@Valid @RequestBody CategoryRequest.PostCategoryDto postcategoryDto,
+		HttpServletRequest request) {
+		Long userId = (Long)request.getAttribute("userId");
+		CategoryResponse.CategoryIdDto categoryIdDto = categoryFacade.modifyCategory(categoryId, postcategoryDto,
+			userId);
 		return new BaseResponse<>(categoryIdDto);
 	}
 
 	@Operation(summary = "카테고리 삭제", description = "카테고리 삭제 API")
 	@DeleteMapping("/{categoryId}")
-	public BaseResponse<String> deleteCategory(@PathVariable("categoryId") Long categoryId) {
-		categoryFacade.deleteCategory(categoryId);
+	public BaseResponse<String> deleteCategory(@PathVariable("categoryId") Long categoryId,
+		HttpServletRequest request) {
+		Long userId = (Long)request.getAttribute("userId");
+		categoryFacade.deleteCategory(categoryId, userId);
 		return new BaseResponse<>("삭제에 성공하셨습니다.");
 	}
 
