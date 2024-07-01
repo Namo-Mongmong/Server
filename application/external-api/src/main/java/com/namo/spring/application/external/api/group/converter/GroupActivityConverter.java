@@ -10,39 +10,39 @@ import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocationAndUser;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocationImg;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 
-public class MoimMemoLocationConverter {
-	private MoimMemoLocationConverter() {
+public class GroupActivityConverter {
+	private GroupActivityConverter() {
 		throw new IllegalArgumentException("Util Class");
 	}
 
-	public static MoimMemoLocation toMoimMemoLocation(MoimMemo moimMemo, GroupDiaryRequest.LocationDto locationDto) {
+	public static MoimMemoLocation toGroupActivity(MoimMemo groupMemo, GroupDiaryRequest.LocationDto locationDto) {
 		return MoimMemoLocation.builder()
-			.moimMemo(moimMemo)
+			.moimMemo(groupMemo)
 			.name(locationDto.getName())
 			.totalAmount(locationDto.getMoney())
 			.build();
 	}
 
-	public static List<MoimMemoLocationAndUser> toMoimMemoLocationLocationAndUsers(MoimMemoLocation moimMemoLocation,
+	public static List<MoimMemoLocationAndUser> toGroupActivityAndUsers(MoimMemoLocation groupActivity,
 		List<User> users) {
 		return users.stream()
-			.map((user) -> toMoimMemoLocationLocationAndUser(moimMemoLocation, user))
+			.map((user) -> toGroupActivityAndUser(groupActivity, user))
 			.collect(Collectors.toList());
 	}
 
-	public static MoimMemoLocationAndUser toMoimMemoLocationLocationAndUser(MoimMemoLocation moimMemoLocation,
+	public static MoimMemoLocationAndUser toGroupActivityAndUser(MoimMemoLocation groupActivity,
 		User user) {
 		return MoimMemoLocationAndUser
 			.builder()
-			.moimMemoLocation(moimMemoLocation)
+			.moimMemoLocation(groupActivity)
 			.user(user)
 			.build();
 	}
 
-	public static MoimMemoLocationImg toMoimMemoLocationLocationImg(MoimMemoLocation moimMemoLocation, String url) {
+	public static MoimMemoLocationImg toGroupActivityImg(MoimMemoLocation groupActivity, String url) {
 		return MoimMemoLocationImg
 			.builder()
-			.moimMemoLocation(moimMemoLocation)
+			.moimMemoLocation(groupActivity)
 			.url(url)
 			.build();
 	}

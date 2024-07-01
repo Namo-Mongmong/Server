@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import com.namo.spring.application.external.api.individual.controller.ScheduleController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,9 +21,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.namo.spring.application.external.api.individual.facade.ScheduleFacade;
+import com.namo.spring.application.external.api.individual.controller.ScheduleController;
 import com.namo.spring.application.external.api.individual.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
+import com.namo.spring.application.external.api.individual.facade.ScheduleFacade;
 import com.namo.spring.application.external.global.config.interceptor.AuthenticationInterceptor;
 import com.namo.spring.application.external.global.utils.Converter;
 
@@ -145,7 +145,7 @@ public class ScheduleControllerTest {
 		list.add(getScheduleDto);
 		list.add(getScheduleDto);
 		System.out.println("리스트" + list.size());
-		given(scheduleFacade.getMoimSchedulesByUser(any(), anyList())).willReturn(list);
+		given(scheduleFacade.getGroupSchedulesByUser(any(), anyList())).willReturn(list);
 
 		//when & then
 		mockMvc.perform(
@@ -220,7 +220,7 @@ public class ScheduleControllerTest {
 		list.add(getScheduleDto);
 		list.add(getScheduleDto);
 		list.add(getScheduleDto);
-		given(scheduleFacade.getAllMoimSchedulesByUser(any())).willReturn(list);
+		given(scheduleFacade.getAllGroupSchedulesByUser(any())).willReturn(list);
 
 		//when & then
 		mockMvc.perform(

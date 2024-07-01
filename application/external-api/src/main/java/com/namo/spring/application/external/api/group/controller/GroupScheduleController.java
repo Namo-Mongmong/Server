@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
-import com.namo.spring.application.external.api.group.facade.MoimScheduleFacade;
+import com.namo.spring.application.external.api.group.facade.GroupScheduleFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/v1/group/schedules")
 public class GroupScheduleController {
-	private final MoimScheduleFacade moimScheduleFacade;
+	private final GroupScheduleFacade groupScheduleFacade;
 	private final Converter converter;
 
 	@Operation(summary = "모임 일정 생성", description = "모임 일정 생성 API")
@@ -47,10 +47,10 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Long> createMoimSchedule(
+	public ResponseDto<Long> createGroupSchedule(
 		@Valid @RequestBody GroupScheduleRequest.PostGroupScheduleDto scheduleReq
 	) {
-		Long scheduleId = moimScheduleFacade.createSchedule(scheduleReq);
+		Long scheduleId = groupScheduleFacade.createSchedule(scheduleReq);
 		return ResponseDto.onSuccess(scheduleId);
 	}
 
@@ -62,10 +62,10 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Long> modifyMoimSchedule(
+	public ResponseDto<Long> modifyGroupSchedule(
 		@Valid @RequestBody GroupScheduleRequest.PatchGroupScheduleDto scheduleReq
 	) {
-		moimScheduleFacade.modifyMoimSchedule(scheduleReq);
+		groupScheduleFacade.modifyGroupSchedule(scheduleReq);
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -77,11 +77,11 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Long> modifyMoimScheduleCategory(
+	public ResponseDto<Long> modifyGroupScheduleCategory(
 		@Valid @RequestBody GroupScheduleRequest.PatchGroupScheduleCategoryDto scheduleReq,
 		HttpServletRequest request
 	) {
-		moimScheduleFacade.modifyMoimScheduleCategory(scheduleReq, (Long)request.getAttribute("userId"));
+		groupScheduleFacade.modifyGroupScheduleCategory(scheduleReq, (Long)request.getAttribute("userId"));
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -93,11 +93,11 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Long> removeMoimSchedule(
-		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
+	public ResponseDto<Long> removeGroupSchedule(
+		@Parameter(description = "모임 일정 ID") @PathVariable Long groupScheduleId,
 		HttpServletRequest request
 	) {
-		moimScheduleFacade.removeMoimSchedule(moimScheduleId, (Long)request.getAttribute("userId"));
+		groupScheduleFacade.removeGroupSchedule(groupScheduleId, (Long)request.getAttribute("userId"));
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -109,13 +109,13 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<GroupScheduleResponse.MoimScheduleDto> getMonthMoimSchedules(
+	public ResponseDto<GroupScheduleResponse.GroupScheduleDto> getMonthGroupSchedules(
 		@Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
 		HttpServletRequest request
 	) {
 		List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
-		List<GroupScheduleResponse.MoimScheduleDto> schedules = moimScheduleFacade.getMonthMoimSchedules(groupId,
+		List<GroupScheduleResponse.GroupScheduleDto> schedules = groupScheduleFacade.getMonthGroupSchedules(groupId,
 			localDateTimes, (Long)request.getAttribute("userId"));
 		return ResponseDto.onSuccess(schedules.get(0));
 	}
@@ -128,12 +128,12 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<GroupScheduleResponse.MoimScheduleDto> getAllMoimSchedules(
+	public ResponseDto<GroupScheduleResponse.GroupScheduleDto> getAllGroupSchedules(
 		@Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
 		HttpServletRequest request
 	) {
-		List<GroupScheduleResponse.MoimScheduleDto> schedules
-			= moimScheduleFacade.getAllMoimSchedules(groupId, (Long)request.getAttribute("userId"));
+		List<GroupScheduleResponse.GroupScheduleDto> schedules
+			= groupScheduleFacade.getAllGroupSchedules(groupId, (Long)request.getAttribute("userId"));
 		return ResponseDto.onSuccess(schedules.get(0));
 	}
 
@@ -145,11 +145,11 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Void> createMoimScheduleAlarm(
+	public ResponseDto<Void> createGroupScheduleAlarm(
 		@Valid @RequestBody GroupScheduleRequest.PostGroupScheduleAlarmDto postGroupScheduleAlarmDto,
 		HttpServletRequest request
 	) {
-		moimScheduleFacade.createMoimScheduleAlarm(postGroupScheduleAlarmDto, (Long)request.getAttribute("userId"));
+		groupScheduleFacade.createGroupScheduleAlarm(postGroupScheduleAlarmDto, (Long)request.getAttribute("userId"));
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -161,11 +161,11 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Void> modifyMoimScheduleAlarm(
+	public ResponseDto<Void> modifyGroupScheduleAlarm(
 		@Valid @RequestBody GroupScheduleRequest.PostGroupScheduleAlarmDto postGroupScheduleAlarmDto,
 		HttpServletRequest request
 	) {
-		moimScheduleFacade.modifyMoimScheduleAlarm(postGroupScheduleAlarmDto, (Long)request.getAttribute("userId"));
+		groupScheduleFacade.modifyGroupScheduleAlarm(postGroupScheduleAlarmDto, (Long)request.getAttribute("userId"));
 		return ResponseDto.onSuccess(null);
 	}
 }

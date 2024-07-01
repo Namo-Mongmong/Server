@@ -66,18 +66,18 @@ public class CategoryService {
 		}
 	}
 
-	public List<Category> getMoimUsersCategories(List<User> users) {
-		List<Category> moimCategoriesByUsers = categoryRepository.findMoimCategoriesByUsers(users, CategoryKind.MOIM);
-		validateMoimUsersCategories(users, moimCategoriesByUsers);
-		return moimCategoriesByUsers;
+	public List<Category> getGroupUsersCategories(List<User> users) {
+		List<Category> groupCategoriesByUsers = categoryRepository.findMoimCategoriesByUsers(users, CategoryKind.MOIM);
+		validateGroupUsersCategories(users, groupCategoriesByUsers);
+		return groupCategoriesByUsers;
 	}
 
-	private void validateMoimUsersCategories(List<User> users, List<Category> moimCategoriesByUsers) {
-		Set<User> moimCategoriesUsers = moimCategoriesByUsers.stream()
+	private void validateGroupUsersCategories(List<User> users, List<Category> groupCategoriesByUsers) {
+		Set<User> groupCategoriesUsers = groupCategoriesByUsers.stream()
 			.map(Category::getUser)
 			.collect(Collectors.toSet());
-		if (users.size() != moimCategoriesUsers.size()) {
-			throw new IndividualException(ErrorStatus.NOT_HAS_MOIM_CATEGORIES_USERS);
+		if (users.size() != groupCategoriesUsers.size()) {
+			throw new IndividualException(ErrorStatus.NOT_HAS_GROUP_CATEGORIES_USERS);
 		}
 	}
 

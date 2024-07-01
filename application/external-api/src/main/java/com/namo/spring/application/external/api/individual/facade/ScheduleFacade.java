@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.namo.spring.application.external.api.group.service.MoimScheduleAndUserService;
-import com.namo.spring.application.external.api.group.service.MoimScheduleService;
+import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupScheduleService;
 import com.namo.spring.application.external.api.individual.converter.AlarmConverter;
 import com.namo.spring.application.external.api.individual.converter.ScheduleConverter;
 import com.namo.spring.application.external.api.individual.converter.ScheduleResponseConverter;
@@ -21,8 +21,8 @@ import com.namo.spring.application.external.api.individual.service.ImageService;
 import com.namo.spring.application.external.api.individual.service.PeriodService;
 import com.namo.spring.application.external.api.individual.service.ScheduleService;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
+import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.db.mysql.domains.group.domain.MoimSchedule;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.db.mysql.domains.individual.domain.Alarm;
@@ -43,9 +43,9 @@ public class ScheduleFacade {
 	private final AlarmService alarmService;
 	private final ImageService imageService;
 	private final CategoryService categoryService;
-	private final MoimScheduleService moimScheduleService;
+	private final GroupScheduleService groupScheduleService;
 	private final PeriodService periodService;
-	private final MoimScheduleAndUserService moimScheduleAndUserService;
+	private final GroupScheduleAndUserService groupScheduleAndUserService;
 	private final FileUtils fileUtils;
 
 	@Transactional
@@ -73,10 +73,10 @@ public class ScheduleFacade {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ScheduleResponse.GetScheduleDto> getMoimSchedulesByUser(Long userId,
+	public List<ScheduleResponse.GetScheduleDto> getGroupSchedulesByUser(Long userId,
 		List<LocalDateTime> localDateTimes) {
 		User user = userService.getUser(userId);
-		return scheduleService.getMoimSchedulesByUser(user, localDateTimes.get(0), localDateTimes.get(1));
+		return scheduleService.getGroupSchedulesByUser(user, localDateTimes.get(0), localDateTimes.get(1));
 	}
 
 	@Transactional(readOnly = true)
@@ -86,9 +86,9 @@ public class ScheduleFacade {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ScheduleResponse.GetScheduleDto> getAllMoimSchedulesByUser(Long userId) {
+	public List<ScheduleResponse.GetScheduleDto> getAllGroupSchedulesByUser(Long userId) {
 		User user = userService.getUser(userId);
-		return scheduleService.getAllMoimSchedulesByUser(user);
+		return scheduleService.getAllGroupSchedulesByUser(user);
 	}
 
 	@Transactional
@@ -135,11 +135,12 @@ public class ScheduleFacade {
 			return;
 		}
 		User user = userService.getUser(userId);
-		MoimSchedule moimSchedule = moimScheduleService.getMoimScheduleWithMoimScheduleAndUsers(scheduleId);
-		MoimScheduleAndUser moimScheduleAndUser = moimScheduleAndUserService.getMoimScheduleAndUser(moimSchedule, user);
+		MoimSchedule groupSchedule = groupScheduleService.getGroupScheduleWithGroupScheduleAndUsers(scheduleId);
+		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
+			user);
 
-		moimScheduleAndUserService.removeMoimScheduleAlarm(moimScheduleAndUser);
-		moimScheduleAndUserService.removeMoimScheduleAndUserInPersonalSpace(moimScheduleAndUser);
+		groupScheduleAndUserService.removeGroupScheduleAlarm(groupScheduleAndUser);
+		groupScheduleAndUserService.removeGroupScheduleAndUserInPersonalSpace(groupScheduleAndUser);
 	}
 
 }

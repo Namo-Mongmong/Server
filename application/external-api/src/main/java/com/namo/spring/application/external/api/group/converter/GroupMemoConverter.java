@@ -3,14 +3,14 @@ package com.namo.spring.application.external.api.group.converter;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
 import com.namo.spring.db.mysql.domains.group.domain.MoimSchedule;
 
-public class MoimMemoConverter {
-	private MoimMemoConverter() {
+public class GroupMemoConverter {
+	private GroupMemoConverter() {
 		throw new IllegalStateException("Utill Classes");
 	}
 
-	public static MoimMemo toMoimMemo(MoimSchedule moimSchedule) {
+	public static MoimMemo toGroupMemo(MoimSchedule groupSchedule) {
 		return MoimMemo.builder()
-			.moimSchedule(moimSchedule)
+			.moimSchedule(groupSchedule)
 			.build();
 	}
 }

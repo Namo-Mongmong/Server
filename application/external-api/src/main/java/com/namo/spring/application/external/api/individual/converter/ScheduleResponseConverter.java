@@ -63,11 +63,11 @@ public class ScheduleResponseConverter {
 			.build();
 	}
 
-	private static Boolean decideHasDiary(MoimMemo moimMemo, String userMemo) {
-		if (moimMemo != null && userMemo != null) {
+	private static Boolean decideHasDiary(MoimMemo groupMemo, String userMemo) {
+		if (groupMemo != null && userMemo != null) {
 			return Boolean.TRUE;
 		}
-		if (moimMemo != null && userMemo == null) {
+		if (groupMemo != null && userMemo == null) {
 			return Boolean.FALSE;
 		}
 		return null;
@@ -88,16 +88,16 @@ public class ScheduleResponseConverter {
 			.build();
 	}
 
-	public static ScheduleResponse.DiaryDto toDiaryDto(MoimScheduleAndUser moimScheduleAndUser) {
+	public static ScheduleResponse.DiaryDto toDiaryDto(MoimScheduleAndUser groupScheduleAndUser) {
 		return ScheduleResponse.DiaryDto.builder()
-			.scheduleId(moimScheduleAndUser.getMoimSchedule().getId())
-			.name(moimScheduleAndUser.getMoimSchedule().getName())
-			.startDate(DateUtil.toSeconds((moimScheduleAndUser.getMoimSchedule().getPeriod().getStartDate())))
-			.contents(moimScheduleAndUser.getMemo())
-			.categoryId(moimScheduleAndUser.getCategory().getId())
-			.color(moimScheduleAndUser.getCategory().getPalette().getId())
-			.placeName(moimScheduleAndUser.getMoimSchedule().getLocation().getLocationName())
-			.urls(moimScheduleAndUser.getMoimSchedule().getMoimMemo()
+			.scheduleId(groupScheduleAndUser.getMoimSchedule().getId())
+			.name(groupScheduleAndUser.getMoimSchedule().getName())
+			.startDate(DateUtil.toSeconds((groupScheduleAndUser.getMoimSchedule().getPeriod().getStartDate())))
+			.contents(groupScheduleAndUser.getMemo())
+			.categoryId(groupScheduleAndUser.getCategory().getId())
+			.color(groupScheduleAndUser.getCategory().getPalette().getId())
+			.placeName(groupScheduleAndUser.getMoimSchedule().getLocation().getLocationName())
+			.urls(groupScheduleAndUser.getMoimSchedule().getMoimMemo()
 				.getMoimMemoLocations()
 				.stream()
 				.flatMap(location -> location.getMoimMemoLocationImgs().stream())
@@ -109,12 +109,12 @@ public class ScheduleResponseConverter {
 
 	public static List<ScheduleResponse.GetScheduleDto> toGetScheduleDtos(
 		List<ScheduleProjection.ScheduleDto> personalSchedules,
-		List<MoimScheduleProjection.ScheduleDto> moimSchedules) {
+		List<MoimScheduleProjection.ScheduleDto> groupSchedules) {
 		List<ScheduleResponse.GetScheduleDto> results = personalSchedules.stream()
 			.map(ScheduleResponseConverter::toGetScheduleRes)
 			.collect(Collectors.toList());
-		if (moimSchedules != null) {
-			results.addAll(moimSchedules.stream().map(ScheduleResponseConverter::toGetScheduleRes)
+		if (groupSchedules != null) {
+			results.addAll(groupSchedules.stream().map(ScheduleResponseConverter::toGetScheduleRes)
 				.collect(Collectors.toList()));
 		}
 		return results;

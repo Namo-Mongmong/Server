@@ -60,12 +60,12 @@ public enum ErrorStatus implements BaseErrorCode {
 	NOT_FOUND_CATEGORY_FAILURE(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
 	NOT_FOUND_PALETTE_FAILURE(HttpStatus.NOT_FOUND, "팔레트를 찾을 수 없습니다."),
 	NOT_FOUND_DIARY_FAILURE(HttpStatus.NOT_FOUND, "다이어리를 찾을 수 없습니다."),
-	NOT_FOUND_MOIM_DIARY_FAILURE(HttpStatus.NOT_FOUND, "모임 메모 장소를 찾을 수 없습니다."),
-	NOT_FOUND_MOIM_FAILURE(HttpStatus.NOT_FOUND, "모임을 찾을 수 없습니다."),
-	NOT_FOUND_MOIM_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 구성원이 아닙니다."),
-	NOT_FOUND_MOIM_SCHEDULE_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 스케줄 구성원이 아닙니다."),
-	NOT_FOUND_MOIM_MEMO_FAILURE(HttpStatus.NOT_FOUND, "모임 메모를 찾을 수 없습니다."),
-	NOT_FOUND_MOIM_MEMO_LOCATION_FAILURE(HttpStatus.NOT_FOUND, "모임 장소를 찾을 수 없습니다."),
+	NOT_FOUND_GROUP_DIARY_FAILURE(HttpStatus.NOT_FOUND, "모임 메모 장소를 찾을 수 없습니다."),
+	NOT_FOUND_GROUP_FAILURE(HttpStatus.NOT_FOUND, "모임을 찾을 수 없습니다."),
+	NOT_FOUND_GROUP_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 구성원이 아닙니다."),
+	NOT_FOUND_GROUP_SCHEDULE_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 스케줄 구성원이 아닙니다."),
+	NOT_FOUND_GROUP_MEMO_FAILURE(HttpStatus.NOT_FOUND, "모임 메모를 찾을 수 없습니다."),
+	NOT_FOUND_GROUP_MEMO_LOCATION_FAILURE(HttpStatus.NOT_FOUND, "모임 장소를 찾을 수 없습니다."),
 	NOT_FOUND_COLOR(HttpStatus.NOT_FOUND, "색깔을 찾을 수 없습니다."),
 
 	/**
@@ -74,11 +74,11 @@ public enum ErrorStatus implements BaseErrorCode {
 	NOT_DELETE_BASE_CATEGORY_FAILURE(HttpStatus.NOT_FOUND, "일정 및 모임 카테고리는 삭제 될 수 없습니다."),
 	NOT_CHANGE_SPECIFIED_NAME_FAILURE(HttpStatus.NOT_FOUND, "일정 및 모임은 기본 카테고리로 지정된 이름입니다."),
 	NOT_CHECK_TERM_ERROR(HttpStatus.NOT_FOUND, "약관에 무조건 동의 해야합니다."),
-	MOIM_IS_FULL_ERROR(HttpStatus.NOT_FOUND, "모임이 가득 차 있습니다."),
-	MOIM_MEMO_IS_FULL_ERROR(HttpStatus.NOT_FOUND, "모임 메모가 가득 차 있습니다."),
-	NOT_INCLUDE_MOIM_USER(HttpStatus.NOT_FOUND, "모임 안에 포함되어 있지 않은 유저입니다."),
+	GROUP_IS_FULL_ERROR(HttpStatus.NOT_FOUND, "모임이 가득 차 있습니다."),
+	GROUP_MEMO_IS_FULL_ERROR(HttpStatus.NOT_FOUND, "모임 메모가 가득 차 있습니다."),
+	NOT_INCLUDE_GROUP_USER(HttpStatus.NOT_FOUND, "모임 안에 포함되어 있지 않은 유저입니다."),
 	EMPTY_USERS_FAILURE(HttpStatus.NOT_FOUND, "스케줄 참여 유저가 없습니다."),
-	NOT_HAS_MOIM_CATEGORIES_USERS(HttpStatus.NOT_FOUND, "유저들에 대한 모임의 카테고리가 없습니다."),
+	NOT_HAS_GROUP_CATEGORIES_USERS(HttpStatus.NOT_FOUND, "유저들에 대한 모임의 카테고리가 없습니다."),
 	INVALID_DATE(HttpStatus.NOT_FOUND, "시작 날짜가 종료 날짜 이전 이어야 합니다."),
 	INVALID_ALARM(HttpStatus.NOT_FOUND, "알람 시간이 유효하지 않습니다."),
 
@@ -87,16 +87,16 @@ public enum ErrorStatus implements BaseErrorCode {
 	 */
 	DIARY_EXISTS_FAILURE(HttpStatus.NOT_FOUND, "이미 존재하는 다이어리 입니다."),
 	DUPLICATE_PARTICIPATE_FAILURE(HttpStatus.NOT_FOUND, "이미 가입한 모임입니다."),
-	DUPLICATE_MOIM_MEMO_FAILURE(HttpStatus.NOT_FOUND, "이미 모임 메모가 생성되어 있습니다."),
+	DUPLICATE_GROUP_MEMO_FAILURE(HttpStatus.NOT_FOUND, "이미 모임 메모가 생성되어 있습니다."),
 
 	/**
 	 * 404 : 오용 오류
 	 */
 	NOT_USERS_CATEGORY(HttpStatus.NOT_FOUND, "해당 유저의 카테고리가 아닙니다."),
-	NOT_USERS_IN_MOIM(HttpStatus.NOT_FOUND, "유저가 모임에 포함되어 있지 않습니다."),
+	NOT_USERS_IN_GROUP(HttpStatus.NOT_FOUND, "유저가 모임에 포함되어 있지 않습니다."),
 
 	/**
-	 *404 : 인프라 에러
+	 * 404 : 인프라 에러
 	 */
 	FILE_NAME_EXCEPTION(HttpStatus.NOT_FOUND, "파일 확장자가 잘못되었습니다."),
 	S3_FAILURE(HttpStatus.NOT_FOUND, "파일 업로드 과정에서 오류가 발생하였습니다."),
@@ -124,7 +124,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	public int getCode() {
 		return code.value();
 	}
-	
+
 	public HttpStatus getHttpStatus() {
 		return code;
 	}

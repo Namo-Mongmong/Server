@@ -63,7 +63,7 @@ public class UserService {
 			.orElseThrow(() -> new UserException(ErrorStatus.NOT_FOUND_USER_FAILURE));
 	}
 
-	public List<User> getUsersInMoimSchedule(List<Long> users) {
+	public List<User> getUsersInGroupSchedule(List<Long> users) {
 		return userRepository.findUsersById(users);
 	}
 
@@ -83,10 +83,9 @@ public class UserService {
 	/**
 	 * 사용자의 refreshToken을 업데이트합니다.
 	 *
-	 * @deprecated {@link JwtAuthHelper#refresh(String)} 메서드를 사용합니다.
-	 *
 	 * @param userId       : 사용자 ID
 	 * @param refreshToken : 새로운 refreshToken
+	 * @deprecated {@link JwtAuthHelper#refresh(String)} 메서드를 사용합니다.
 	 */
 	@Deprecated(since = "JwtAuthHelper 클래스의 refresh 메서드를 사용합니다.", forRemoval = true)
 	public void updateRefreshToken(Long userId, String refreshToken) {

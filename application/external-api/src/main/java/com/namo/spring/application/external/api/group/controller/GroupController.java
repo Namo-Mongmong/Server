@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.namo.spring.application.external.api.group.dto.GroupRequest;
 import com.namo.spring.application.external.api.group.dto.GroupResponse;
-import com.namo.spring.application.external.api.group.facade.MoimFacade;
+import com.namo.spring.application.external.api.group.facade.GroupFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
@@ -37,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/v1/groups")
 public class GroupController {
-	private final MoimFacade moimFacade;
+	private final GroupFacade groupFacade;
 
 	@Operation(summary = "그룹 생성", description = "그룹 생성 API")
 	@PostMapping(value = "",
@@ -50,12 +50,12 @@ public class GroupController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<GroupResponse.GroupIdDto> createMoim(
+	public ResponseDto<GroupResponse.GroupIdDto> createGroup(
 		@Parameter(description = "그룹 프로필 img") @RequestPart(required = false) MultipartFile img,
 		@Parameter(description = "그룹명") @RequestPart(required = true) String groupName,
 		HttpServletRequest request
 	) {
-		GroupResponse.GroupIdDto groupIdDto = moimFacade.createMoim(
+		GroupResponse.GroupIdDto groupIdDto = groupFacade.createGroup(
 			(Long)request.getAttribute("userId"),
 			groupName,
 			img
@@ -72,11 +72,11 @@ public class GroupController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<List<GroupResponse.GroupDto>> findMoims(
+	public ResponseDto<List<GroupResponse.GroupDto>> findGroups(
 		HttpServletRequest request
 	) {
-		List<GroupResponse.GroupDto> moims = moimFacade.getMoims((Long)request.getAttribute("userId"));
-		return ResponseDto.onSuccess(moims);
+		List<GroupResponse.GroupDto> groups = groupFacade.getGroups((Long)request.getAttribute("userId"));
+		return ResponseDto.onSuccess(groups);
 	}
 
 	@Operation(summary = "그룹 이름 수정", description = "그룹 이름 수정 API, 변경자의 입장에서만 수정되어 적용됨")
@@ -87,12 +87,12 @@ public class GroupController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Long> modifyMoimName(
+	public ResponseDto<Long> modifyGroupName(
 		@Valid @RequestBody GroupRequest.PatchGroupNameDto patchGroupNameDto,
 		HttpServletRequest request
 	) {
-		Long moimId = moimFacade.modifyMoimName(patchGroupNameDto, (Long)request.getAttribute("userId"));
-		return ResponseDto.onSuccess(moimId);
+		Long groupId = groupFacade.modifyGroupName(patchGroupNameDto, (Long)request.getAttribute("userId"));
+		return ResponseDto.onSuccess(groupId);
 	}
 
 	@Operation(summary = "그룹 참여", description = "그룹 참여 API")
@@ -103,11 +103,11 @@ public class GroupController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<GroupResponse.GroupParticipantDto> createMoimAndUser(
+	public ResponseDto<GroupResponse.GroupParticipantDto> createGroupAndUser(
 		@Parameter(description = "그룹 참여용 코드") @PathVariable("code") String code,
 		HttpServletRequest request
 	) {
-		GroupResponse.GroupParticipantDto groupParticipantDto = moimFacade.createMoimAndUser(
+		GroupResponse.GroupParticipantDto groupParticipantDto = groupFacade.createGroupAndUser(
 			(Long)request.getAttribute("userId"),
 			code);
 		return ResponseDto.onSuccess(groupParticipantDto);
@@ -121,11 +121,11 @@ public class GroupController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Void> removeMoimAndUser(
+	public ResponseDto<Void> removeGroupAndUser(
 		@Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
 		HttpServletRequest request
 	) {
-		moimFacade.removeMoimAndUser((Long)request.getAttribute("userId"), groupId);
+		groupFacade.removeGroupAndUser((Long)request.getAttribute("userId"), groupId);
 		return ResponseDto.onSuccess(null);
 	}
 }

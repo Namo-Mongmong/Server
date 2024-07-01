@@ -39,7 +39,7 @@ public class ScheduleService {
 		return scheduleRepository.findAllByUser(user);
 	}
 
-	public List<ScheduleResponse.GetScheduleDto> getMoimSchedulesByUser(User user, LocalDateTime startDate,
+	public List<ScheduleResponse.GetScheduleDto> getGroupSchedulesByUser(User user, LocalDateTime startDate,
 		LocalDateTime endDate
 	) {
 		return scheduleRepository.findMoimSchedulesByUserId(user, startDate, endDate)
@@ -53,12 +53,12 @@ public class ScheduleService {
 		List<ScheduleProjection.ScheduleDto> personalSchedules = scheduleRepository.findPersonalSchedulesByUserId(user,
 			startDate,
 			endDate);
-		List<MoimScheduleProjection.ScheduleDto> moimSchedules = scheduleRepository.findMoimSchedulesByUserId(user,
+		List<MoimScheduleProjection.ScheduleDto> groupSchedules = scheduleRepository.findMoimSchedulesByUserId(user,
 			startDate, endDate);
-		return ScheduleResponseConverter.toGetScheduleDtos(personalSchedules, moimSchedules);
+		return ScheduleResponseConverter.toGetScheduleDtos(personalSchedules, groupSchedules);
 	}
 
-	public List<ScheduleResponse.GetScheduleDto> getAllMoimSchedulesByUser(User user) {
+	public List<ScheduleResponse.GetScheduleDto> getAllGroupSchedulesByUser(User user) {
 		return scheduleRepository.findMoimSchedulesByUserId(user, null, null)
 			.stream()
 			.map(ScheduleResponseConverter::toGetScheduleRes)

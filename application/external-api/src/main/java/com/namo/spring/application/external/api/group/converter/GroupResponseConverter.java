@@ -13,54 +13,54 @@ public class GroupResponseConverter {
 		throw new IllegalStateException("Util Class");
 	}
 
-	public static GroupResponse.GroupIdDto toMoimIdDto(Moim moim) {
+	public static GroupResponse.GroupIdDto toGroupIdDto(Moim group) {
 		return GroupResponse.GroupIdDto.builder()
-			.groupId(moim.getId())
+			.groupId(group.getId())
 			.build();
 	}
 
-	public static List<GroupResponse.GroupDto> toMoimDtos(List<MoimAndUser> moimAndUsers,
-		List<MoimAndUser> curUserMoimsInUser) {
-		Map<Moim, List<MoimAndUser>> moimMappingMoimAndUsers = moimAndUsers.stream()
+	public static List<GroupResponse.GroupDto> toGroupDtos(List<MoimAndUser> groupAndUsers,
+		List<MoimAndUser> curUserGroupsInUser) {
+		Map<Moim, List<MoimAndUser>> groupMappingGroupAndUsers = groupAndUsers.stream()
 			.collect(
 				Collectors.groupingBy(
 					MoimAndUser::getMoim
 				)
 			);
-		return curUserMoimsInUser.stream()
-			.map((moimAndUser) -> toMoimDto(moimAndUser, moimMappingMoimAndUsers.get(moimAndUser.getMoim())))
+		return curUserGroupsInUser.stream()
+			.map((groupAndUser) -> toGroupDto(groupAndUser, groupMappingGroupAndUsers.get(groupAndUser.getMoim())))
 			.collect(Collectors.toList());
 	}
 
-	public static GroupResponse.GroupDto toMoimDto(MoimAndUser moimAndUser, List<MoimAndUser> moimAndUsers) {
+	public static GroupResponse.GroupDto toGroupDto(MoimAndUser groupAndUser, List<MoimAndUser> groupAndUsers) {
 		return GroupResponse.GroupDto.builder()
-			.groupId(moimAndUser.getMoim().getId())
-			.groupName(moimAndUser.getMoimCustomName())
-			.groupImgUrl(moimAndUser.getMoim().getImgUrl())
-			.groupCode(moimAndUser.getMoim().getCode())
-			.groupUsers(toMoimUserDtos(moimAndUsers))
+			.groupId(groupAndUser.getMoim().getId())
+			.groupName(groupAndUser.getMoimCustomName())
+			.groupImgUrl(groupAndUser.getMoim().getImgUrl())
+			.groupCode(groupAndUser.getMoim().getCode())
+			.groupUsers(toGroupUserDtos(groupAndUsers))
 			.build();
 	}
 
-	private static List<GroupResponse.GroupUserDto> toMoimUserDtos(List<MoimAndUser> moimAndUsers) {
-		return moimAndUsers.stream()
-			.map(GroupResponseConverter::toMoimUserDto)
+	private static List<GroupResponse.GroupUserDto> toGroupUserDtos(List<MoimAndUser> groupAndUsers) {
+		return groupAndUsers.stream()
+			.map(GroupResponseConverter::toGroupUserDto)
 			.collect(Collectors.toList());
 	}
 
-	private static GroupResponse.GroupUserDto toMoimUserDto(MoimAndUser moimAndUser) {
+	private static GroupResponse.GroupUserDto toGroupUserDto(MoimAndUser groupAndUser) {
 		return GroupResponse.GroupUserDto
 			.builder()
-			.userId(moimAndUser.getUser().getId())
-			.userName(moimAndUser.getUser().getName())
-			.color(moimAndUser.getColor())
+			.userId(groupAndUser.getUser().getId())
+			.userName(groupAndUser.getUser().getName())
+			.color(groupAndUser.getColor())
 			.build();
 	}
 
-	public static GroupResponse.GroupParticipantDto toMoimParticipantDto(Moim moim) {
+	public static GroupResponse.GroupParticipantDto toGroupParticipantDto(Moim group) {
 		return GroupResponse.GroupParticipantDto.builder()
-			.groupId(moim.getId())
-			.code(moim.getCode())
+			.groupId(group.getId())
+			.code(group.getCode())
 			.build();
 	}
 }

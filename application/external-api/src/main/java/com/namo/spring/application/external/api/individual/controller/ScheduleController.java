@@ -17,16 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.individual.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 import com.namo.spring.application.external.api.individual.facade.ScheduleFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -85,12 +84,12 @@ public class ScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getMoimSchedulesByUser(
+	public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getGroupSchedulesByUser(
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
 		HttpServletRequest request
 	) {
 		List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
-		List<ScheduleResponse.GetScheduleDto> userSchedule = scheduleFacade.getMoimSchedulesByUser(
+		List<ScheduleResponse.GetScheduleDto> userSchedule = scheduleFacade.getGroupSchedulesByUser(
 			(Long)request.getAttribute("userId"),
 			localDateTimes
 		);
@@ -122,13 +121,13 @@ public class ScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getAllMoimSchedulesByUser(
+	public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getAllGroupSchedulesByUser(
 		HttpServletRequest request
 	) {
-		List<ScheduleResponse.GetScheduleDto> moimSchedule = scheduleFacade.getAllMoimSchedulesByUser(
+		List<ScheduleResponse.GetScheduleDto> groupSchedule = scheduleFacade.getAllGroupSchedulesByUser(
 			(Long)request.getAttribute("userId")
 		);
-		return ResponseDto.onSuccess(moimSchedule);
+		return ResponseDto.onSuccess(groupSchedule);
 	}
 
 	@Operation(summary = "일정 수정", description = "일정 수정 API")

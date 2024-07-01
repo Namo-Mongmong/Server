@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MoimScheduleService {
+public class GroupScheduleService {
 	private final MoimScheduleRepository moimScheduleRepository;
 	private final MoimScheduleAndUserRepository moimScheduleAndUserRepository;
 
@@ -28,30 +28,30 @@ public class MoimScheduleService {
 	 * 자신이 모임에 소속된 사람이 아닐 시 모임에 대한 스케줄을 생성할 수 없게
 	 * 검증 처리가 있으면 좋을 듯합니다.
 	 */
-	public MoimSchedule createMoimSchedule(MoimSchedule moimSchedule) {
-		return moimScheduleRepository.save(moimSchedule);
+	public MoimSchedule createGroupSchedule(MoimSchedule groupSchedule) {
+		return moimScheduleRepository.save(groupSchedule);
 	}
 
-	public MoimSchedule getMoimSchedule(Long id) {
+	public MoimSchedule getGroupSchedule(Long id) {
 		return moimScheduleRepository.findById(id)
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 	}
 
-	public MoimSchedule getMoimScheduleWithMoimMemo(Long id) {
+	public MoimSchedule getGroupScheduleWithGroupDiary(Long id) {
 		return moimScheduleRepository.findMoimScheduleWithMoimMemoById(id)
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 	}
 
-	public MoimSchedule getMoimScheduleWithMoimScheduleAndUsers(Long id) {
+	public MoimSchedule getGroupScheduleWithGroupScheduleAndUsers(Long id) {
 		return moimScheduleRepository.findMoimSheduleAndMoimScheduleAndUsersById(id)
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 	}
 
-	public void removeMoimSchedule(MoimSchedule moimSchedule) {
-		moimScheduleRepository.delete(moimSchedule);
+	public void removeGroupSchedule(MoimSchedule groupSchedule) {
+		moimScheduleRepository.delete(groupSchedule);
 	}
 
-	public List<MoimScheduleAndUser> getMonthMoimSchedules(
+	public List<MoimScheduleAndUser> getMonthGroupSchedules(
 		List<LocalDateTime> localDateTimes, List<User> users) {
 		return moimScheduleAndUserRepository
 			.findMoimScheduleAndUserWithMoimScheduleByUsersAndDates(
@@ -59,14 +59,14 @@ public class MoimScheduleService {
 			);
 	}
 
-	public List<MoimScheduleAndUser> getAllMoimSchedules(List<User> users) {
+	public List<MoimScheduleAndUser> getAllGroupSchedules(List<User> users) {
 		return moimScheduleAndUserRepository
 			.findMoimScheduleAndUserWithMoimScheduleByUsersAndDates(
 				null, null, users
 			);
 	}
 
-	public List<MoimScheduleAndUser> getMoimScheduleAndUsers(MoimSchedule moimSchedule) {
-		return moimScheduleAndUserRepository.findMoimScheduleAndUserByMoimSchedule(moimSchedule);
+	public List<MoimScheduleAndUser> getGroupScheduleAndUsers(MoimSchedule groupSchedule) {
+		return moimScheduleAndUserRepository.findMoimScheduleAndUserByMoimSchedule(groupSchedule);
 	}
 }

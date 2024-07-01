@@ -19,9 +19,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.namo.spring.application.external.api.group.service.MoimAndUserService;
-import com.namo.spring.application.external.api.group.service.MoimMemoLocationService;
-import com.namo.spring.application.external.api.group.service.MoimScheduleAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupActivityService;
+import com.namo.spring.application.external.api.group.service.GroupAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
 import com.namo.spring.application.external.api.individual.converter.CategoryConverter;
 import com.namo.spring.application.external.api.individual.service.AlarmService;
 import com.namo.spring.application.external.api.individual.service.CategoryService;
@@ -35,11 +35,9 @@ import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
 import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
 import com.namo.spring.application.external.global.common.security.jwt.access.AccessTokenClaimKeys;
-import com.namo.spring.core.infra.common.aws.s3.FileUtils;
 import com.namo.spring.application.external.global.utils.SocialUtils;
 import com.namo.spring.client.social.apple.client.AppleAuthClient;
 import com.namo.spring.client.social.apple.dto.AppleResponse;
@@ -48,6 +46,8 @@ import com.namo.spring.client.social.common.properties.AppleProperties;
 import com.namo.spring.client.social.common.utils.AppleUtils;
 import com.namo.spring.client.social.kakao.client.KakaoAuthClient;
 import com.namo.spring.client.social.naver.client.NaverAuthClient;
+import com.namo.spring.core.infra.common.aws.s3.FileUtils;
+import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.common.jwt.JwtClaims;
 import com.namo.spring.core.infra.common.jwt.JwtProvider;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
@@ -85,9 +85,9 @@ public class UserFacade {
 	private final ScheduleService scheduleService;
 	private final AlarmService alarmService;
 	private final ImageService imageService;
-	private final MoimAndUserService moimAndUserService;
-	private final MoimScheduleAndUserService moimScheduleAndUserService;
-	private final MoimMemoLocationService moimMemoLocationService;
+	private final GroupAndUserService groupAndUserService;
+	private final GroupScheduleAndUserService groupScheduleAndUserService;
+	private final GroupActivityService groupActivityService;
 
 	private final KakaoAuthClient kakaoAuthClient;
 	private final NaverAuthClient naverAuthClient;
@@ -323,13 +323,13 @@ public class UserFacade {
 				imageService.removeImagesBySchedules(schedules);
 				scheduleService.removeSchedules(schedules);
 
-				moimAndUserService.removeMoimAndUsersByUser(user);
+				groupAndUserService.removeGroupAndUsersByUser(user);
 
-				List<MoimScheduleAndUser> moimScheduleAndUsers = moimScheduleAndUserService.getAllByUser(user);
-				moimScheduleAndUserService.removeMoimScheduleAlarms(moimScheduleAndUsers);
-				moimScheduleAndUserService.removeMoimScheduleAndUsers(moimScheduleAndUsers);
+				List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleAndUserService.getAllByUser(user);
+				groupScheduleAndUserService.removeGroupScheduleAlarms(groupScheduleAndUsers);
+				groupScheduleAndUserService.removeGroupScheduleAndUsers(groupScheduleAndUsers);
 
-				moimMemoLocationService.removeMoimMemoLocationAndUsersByUser(user);
+				groupActivityService.removeGroupActivityAndUsersByUser(user);
 				userService.removeUser(user);
 			}
 		);
