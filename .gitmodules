@@ -1,4 +1,0 @@
-[submodule "aws-task-definition"]
-    path = aws-task-definition
-    url = https://github.com/Namo-Mongmong/aws-task-definition
-    branch = main
